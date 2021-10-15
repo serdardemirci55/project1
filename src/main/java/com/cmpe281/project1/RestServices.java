@@ -8,7 +8,9 @@ import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProviderClientBuilder
 import com.amazonaws.services.cognitoidp.model.SignUpResult;
 import com.amazonaws.services.cognitoidp.model.SignUpRequest;
 import com.amazonaws.services.cognitoidp.model.AttributeType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -25,14 +27,17 @@ import java.util.Map;
 @RestController
 public class RestServices {
 
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
     @PostMapping("/login")
     String login(@RequestParam String username, @RequestParam String password) throws IOException {
 
-        String AWS_KEY= "AKIA2YMERL6T2E3CSVEQ";
-        String AWS_SECRET= "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";
+        String AWS_KEY= "AKIA2YMERL6TVUGOUUTV";
+        String AWS_SECRET= "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";
         String REGION= "us-east-2";
-        String CLIENT_ID = "223mvl3br3n1gfdkottm7646mg";
-        String POOL_ID = "us-east-2_WDGEmKsVe";
+        String CLIENT_ID = "1cr20qhha6c4vk39ncna6519h0";
+        String POOL_ID = "us-east-2_xgwjxtYAV";
 
         User user = new User();
         user.setUsername(username);
@@ -68,21 +73,22 @@ public class RestServices {
     }
 
     @PostMapping("/signup")
-    String signup(@RequestParam String username, @RequestParam String password, @RequestParam String name, @RequestParam String given_name) throws IOException {
+    String signup(@RequestParam String username, @RequestParam String password, @RequestParam String first_name, @RequestParam String last_name, @RequestParam String role) throws IOException {
 
         String REGION= "us-east-2";
-        String CLIENT_ID = "223mvl3br3n1gfdkottm7646mg";
+        String CLIENT_ID = "1cr20qhha6c4vk39ncna6519h0";
 
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
-        user.setName(name);
-        user.setGiven_name(given_name);
+        user.setFirst_name(first_name);
+        user.setLast_name(last_name);
+        user.setRole(role);
 
         List <AttributeType > userAttributes = new ArrayList <AttributeType >();
-        AttributeType customAttributeType = new AttributeType().withName("name").withValue(user.getUsername());
+        AttributeType customAttributeType = new AttributeType().withName("name").withValue(user.getFirst_name());
         userAttributes.add(customAttributeType);
-        customAttributeType = new AttributeType().withName("given_name").withValue(user.getGiven_name());
+        customAttributeType = new AttributeType().withName("family_name").withValue(user.getLast_name());
         userAttributes.add(customAttributeType);
 
         AnonymousAWSCredentials awsCreds = new AnonymousAWSCredentials();
@@ -100,6 +106,8 @@ public class RestServices {
 
         try {
             SignUpResult result = cognitoIdentityProvider.signUp(signUpRequest);
+            String sql = "INSERT INTO users (username, first_name, last_name, role) VALUES (?, ?, ?, ?)";
+            int result_insert = jdbcTemplate.update(sql, user.getUsername(), user.getFirst_name(), user.getLast_name(), user.getRole());
             return "Success";
         } catch (Exception e) {
             System.out.println(e);
@@ -109,7 +117,7 @@ public class RestServices {
 
     @GetMapping("/test")
     String test() throws IOException {
-        return "Hello";
+       return null;
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)

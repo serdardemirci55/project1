@@ -32,7 +32,7 @@ public class JwtTokenProvider {
 
     public boolean validateToken(String token) {
         try {
-            URL url = new URL("https://cognito-idp.us-east-2.amazonaws.com/us-east-2_WDGEmKsVe/.well-known/jwks.json");
+            URL url = new URL("https://cognito-idp.us-east-2.amazonaws.com/us-east-2_xgwjxtYAV/.well-known/jwks.json");
             JwkProvider provider = new UrlJwkProvider(url);
             DecodedJWT decodedjwt = JWT.decode("{"+token+"}");
             Jwk jwk = provider.get(decodedjwt.getKeyId());
