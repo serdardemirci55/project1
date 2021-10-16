@@ -1,4 +1,4 @@
-package com.cmpe281.project1;
+package com.cmpe281.project1.controller;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.AnonymousAWSCredentials;
@@ -8,10 +8,15 @@ import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProviderClientBuilder
 import com.amazonaws.services.cognitoidp.model.SignUpResult;
 import com.amazonaws.services.cognitoidp.model.SignUpRequest;
 import com.amazonaws.services.cognitoidp.model.AttributeType;
+import com.cmpe281.project1.entity.Files;
+import com.cmpe281.project1.entity.User;
+import com.cmpe281.project1.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
@@ -29,6 +34,9 @@ public class RestServices {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    FileService fileService;
 
     @PostMapping("/login")
     String login(@RequestParam String username, @RequestParam String password) throws IOException {
@@ -115,9 +123,27 @@ public class RestServices {
         }
     }
 
-    @GetMapping("/test")
-    String test() throws IOException {
-       return null;
+    @PostMapping("/file")
+    public ResponseEntity<Files> uploadFile(@RequestParam("username") String username,
+                                      @RequestParam("title") String title,
+                                      @RequestParam("description") String description,
+                                      @RequestParam("file") MultipartFile file) {
+        return new ResponseEntity<>(fileService.uploadFile(username, title, description, file), HttpStatus.OK);
+    }
+
+    @GetMapping("/file")
+    public ResponseEntity<List<Files>> getFiles(@RequestParam("username") String username) {
+        return new ResponseEntity<>(fileService.getFiles(username), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/file")
+    public String deleteFile(@RequestParam("id") Integer id) {
+        return fileService.deleteFile(id);
+    }
+
+    @GetMapping("/url")
+    public String getUrl(@RequestParam("id") Integer id) {
+        return fileService.getPresignedUrl(id);
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)

@@ -1,4 +1,4 @@
-package com.cmpe281.project1;
+package com.cmpe281.project1.entity;
 
 public class User {
 
