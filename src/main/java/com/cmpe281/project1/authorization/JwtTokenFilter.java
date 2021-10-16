@@ -1,4 +1,4 @@
-package com.cmpe281.project1;
+package com.cmpe281.project1.authorization;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

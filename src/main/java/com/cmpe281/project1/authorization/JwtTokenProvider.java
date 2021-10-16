@@ -1,4 +1,4 @@
-package com.cmpe281.project1;
+package com.cmpe281.project1.authorization;
 
 import com.auth0.jwk.Jwk;
 import com.auth0.jwk.JwkException;
