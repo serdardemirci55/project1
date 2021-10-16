@@ -1,23 +1,23 @@
 package com.cmpe281.project1.service;
 
+import com.cmpe281.project1.entity.Users;
 import com.cmpe281.project1.repositories.FileRepository;
 import com.cmpe281.project1.config.BucketName;
 import com.cmpe281.project1.entity.Files;
+import com.cmpe281.project1.repositories.UserRepository;
 import lombok.AllArgsConstructor;
-import org.joda.time.LocalDate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
 
-import static org.apache.http.entity.ContentType.*;
-
 @Service
 @AllArgsConstructor
 public class FileServiceApply implements FileService {
     private final FileOperation fileOperation;
-    private final FileRepository repository;
+    private final FileRepository fileRepository;
+    private final UserRepository userRepository;
 
     @Override
     public Files uploadFile(String username, String title, String description, MultipartFile file) {
@@ -48,40 +48,45 @@ public class FileServiceApply implements FileService {
                 .path(path)
                 .fileName(fileName)
                 .build();
-        repository.save(files);
-        return repository.findByTitle(files.getTitle());
+        fileRepository.save(files);
+        return fileRepository.findByTitle(files.getTitle());
     }
 
     @Override
     public List<Files> getFiles(String username) {
         List<Files> files = new ArrayList<>();
-        repository.findByUsername(username).forEach(files::add);
+        Users user = userRepository.findByUsername(username);
+        if (user.getRole().equals("admin")) {
+            fileRepository.findAll().forEach(files::add);
+        } else {
+            fileRepository.findByUsername(username).forEach(files::add);
+        }
         return files;
     }
 
     @Override
     public String getPresignedUrl(Integer id) {
-        Files files = repository.findById(id);
+        Files files = fileRepository.findById(id);
         String key = files.getPath().substring(files.getPath().indexOf("/")+1)+"/"+files.getFileName();
         return fileOperation.generatePresignedUrl(key);
     }
 
     @Override
     public String deleteFile(Integer id) {
-        Files files = repository.findById(id);
+        Files files = fileRepository.findById(id);
 
         fileOperation.delete(files.getPath(),files.getFileName());
 
         files.builder()
                 .id(id)
                 .build();
-        repository.delete(files);
+        fileRepository.delete(files);
         return "Sucess";
     }
 
     @Override
     public Files updateFile(Integer id, String description, MultipartFile file) {
-        Files files = repository.findById(id);
+        Files files = fileRepository.findById(id);
         //check if the file is empty
         if (file.isEmpty()) {
             throw new IllegalStateException("Cannot upload empty file");
@@ -105,7 +110,7 @@ public class FileServiceApply implements FileService {
 
         files.setDescription(description);
         files.setFileName(fileName);
-        repository.save(files);
-        return repository.findByTitle(files.getTitle());
+        fileRepository.save(files);
+        return fileRepository.findByTitle(files.getTitle());
     }
 }

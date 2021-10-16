@@ -9,7 +9,7 @@ import com.amazonaws.services.cognitoidp.model.SignUpResult;
 import com.amazonaws.services.cognitoidp.model.SignUpRequest;
 import com.amazonaws.services.cognitoidp.model.AttributeType;
 import com.cmpe281.project1.entity.Files;
-import com.cmpe281.project1.entity.User;
+import com.cmpe281.project1.entity.Users;
 import com.cmpe281.project1.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,9 +47,8 @@ public class RestServices {
         String CLIENT_ID = "1cr20qhha6c4vk39ncna6519h0";
         String POOL_ID = "us-east-2_xgwjxtYAV";
 
-        User user = new User();
+        Users user = new Users();
         user.setUsername(username);
-        user.setPassword(password);
 
         AwsBasicCredentials awsCreds = AwsBasicCredentials.create(AWS_KEY,
                 AWS_SECRET);
@@ -62,7 +61,7 @@ public class RestServices {
 
         final Map<String, String> authParams = new HashMap<>();
         authParams.put("USERNAME", user.getUsername());
-        authParams.put("PASSWORD", user.getPassword());
+        authParams.put("PASSWORD", password);
 
         final AdminInitiateAuthRequest authRequest = AdminInitiateAuthRequest.builder()
                 .authFlow(AuthFlowType.ADMIN_USER_PASSWORD_AUTH)
@@ -86,9 +85,8 @@ public class RestServices {
         String REGION= "us-east-2";
         String CLIENT_ID = "1cr20qhha6c4vk39ncna6519h0";
 
-        User user = new User();
+        Users user = new Users();
         user.setUsername(username);
-        user.setPassword(password);
         user.setFirst_name(first_name);
         user.setLast_name(last_name);
         user.setRole(role);
@@ -109,7 +107,7 @@ public class RestServices {
         SignUpRequest signUpRequest = new SignUpRequest();
         signUpRequest.setClientId(CLIENT_ID);
         signUpRequest.setUsername(user.getUsername());
-        signUpRequest.setPassword(user.getPassword());
+        signUpRequest.setPassword(password);
         signUpRequest.setUserAttributes(userAttributes);
 
         try {

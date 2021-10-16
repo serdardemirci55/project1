@@ -1,24 +1,22 @@
 package com.cmpe281.project1.entity;
 
-import javax.persistence.*;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Entity
-public class Files {
+public class Users {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
     private String username;
-    private String title;
-    private String description;
-    private String path;
-    private String fileName;
+    private String first_name;
+    private String last_name;
+    private String role;
 }
