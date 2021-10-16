@@ -141,6 +141,13 @@ public class RestServices {
         return fileService.deleteFile(id);
     }
 
+    @PostMapping("/updatefile")
+    public ResponseEntity<Files> updateFile(@RequestParam("id") Integer id,
+                                            @RequestParam("description") String description,
+                                            @RequestParam("file") MultipartFile file) {
+        return new ResponseEntity<>(fileService.updateFile(id, description, file), HttpStatus.OK);
+    }
+
     @GetMapping("/url")
     public String getUrl(@RequestParam("id") Integer id) {
         return fileService.getPresignedUrl(id);

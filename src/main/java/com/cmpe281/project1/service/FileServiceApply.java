@@ -79,4 +79,33 @@ public class FileServiceApply implements FileService {
         return "Sucess";
     }
 
+    @Override
+    public Files updateFile(Integer id, String description, MultipartFile file) {
+        Files files = repository.findById(id);
+        //check if the file is empty
+        if (file.isEmpty()) {
+            throw new IllegalStateException("Cannot upload empty file");
+        }
+        //Check if the file is greater than 10 MB
+        if (file.getSize() > 10485760) {
+            throw new IllegalStateException("File uploaded is greater than 10 MB");
+        }
+        //get file metadata
+        Map<String, String> metadata = new HashMap<>();
+        metadata.put("Content-Type", file.getContentType());
+        metadata.put("Content-Length", String.valueOf(file.getSize()));
+        //Save File in S3 and then save Files in the database
+        String fileName = String.format("%s", file.getOriginalFilename());
+        try {
+            //fileOperation.delete(path,fileName);
+            fileOperation.upload(files.getPath(), fileName, Optional.of(metadata), file.getInputStream());
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to upload file", e);
+        }
+
+        files.setDescription(description);
+        files.setFileName(fileName);
+        repository.save(files);
+        return repository.findByTitle(files.getTitle());
+    }
 }

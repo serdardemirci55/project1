@@ -13,4 +13,6 @@ public interface FileService {
     String getPresignedUrl (Integer id);
 
     String deleteFile (Integer id);
+
+    Files updateFile(Integer id, String description, MultipartFile file);
 }
