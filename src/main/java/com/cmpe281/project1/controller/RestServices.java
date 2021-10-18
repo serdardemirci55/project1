@@ -10,9 +10,9 @@ import com.amazonaws.services.cognitoidp.model.SignUpRequest;
 import com.amazonaws.services.cognitoidp.model.AttributeType;
 import com.cmpe281.project1.authorization.JwtTokenProvider;
 import com.cmpe281.project1.entity.Files;
+import com.cmpe281.project1.entity.Login;
 import com.cmpe281.project1.entity.UserFileDto;
 import com.cmpe281.project1.entity.Users;
-import com.cmpe281.project1.repositories.UserRepository;
 import com.cmpe281.project1.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,17 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
-import software.amazon.awssdk.services.cognitoidentityprovider.model.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -43,42 +36,8 @@ public class RestServices {
     FileService fileService;
 
     @PostMapping("/login")
-    String login(@RequestParam String username, @RequestParam String password) throws IOException {
-
-        String AWS_KEY= "AKIA2YMERL6TVUGOUUTV";
-        String AWS_SECRET= "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";
-        String REGION= "us-east-2";
-        String CLIENT_ID = "1cr20qhha6c4vk39ncna6519h0";
-        String POOL_ID = "us-east-2_xgwjxtYAV";
-
-
-        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(AWS_KEY,
-                AWS_SECRET);
-
-        CognitoIdentityProviderClient identityProviderClient =
-                CognitoIdentityProviderClient.builder()
-                        .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
-                        .region(Region.of(REGION))
-                        .build();
-
-        final Map<String, String> authParams = new HashMap<>();
-        authParams.put("USERNAME", username);
-        authParams.put("PASSWORD", password);
-
-        final AdminInitiateAuthRequest authRequest = AdminInitiateAuthRequest.builder()
-                .authFlow(AuthFlowType.ADMIN_USER_PASSWORD_AUTH)
-                .clientId(CLIENT_ID)
-                .userPoolId(POOL_ID)
-                .authParameters(authParams)
-                .build();
-
-        try {
-            AdminInitiateAuthResponse result = identityProviderClient.adminInitiateAuth(authRequest);
-            return(result.authenticationResult().accessToken());
-        } catch (Exception e) {
-            System.out.println(e);
-            return e.getMessage();
-        }
+    ResponseEntity<Login> login(@RequestParam String username, @RequestParam String password) throws IOException {
+        return new ResponseEntity<>(fileService.login(username, password), HttpStatus.OK);
     }
 
     @PostMapping("/signup")

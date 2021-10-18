@@ -1,6 +1,7 @@
 package com.cmpe281.project1.service;
 
 import com.cmpe281.project1.entity.Files;
+import com.cmpe281.project1.entity.Login;
 import com.cmpe281.project1.entity.UserFileDto;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,4 +17,6 @@ public interface FileService {
     String deleteFile (Integer id);
 
     Files updateFile(Integer id, String description, MultipartFile file);
+
+    Login login(String username, String password);
 }

@@ -8,6 +8,10 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Value;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
 
 @Configuration
 public class AwsConfig {
@@ -23,5 +27,19 @@ public class AwsConfig {
                 .withRegion(REGION)
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
+    }
+
+    @Bean
+    public CognitoIdentityProviderClient cognito() {
+        String AWS_KEY= "AKIA2YMERL6TVUGOUUTV";
+        String AWS_SECRET= "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";
+        String REGION= "us-east-2";
+        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(AWS_KEY,
+                AWS_SECRET);
+        return CognitoIdentityProviderClient
+                        .builder()
+                        .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
+                        .region(Region.of(REGION))
+                        .build();
     }
 }

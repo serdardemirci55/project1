@@ -1,5 +1,6 @@
 package com.cmpe281.project1.service;
 
+import com.cmpe281.project1.entity.Login;
 import com.cmpe281.project1.entity.UserFileDto;
 import com.cmpe281.project1.entity.Users;
 import com.cmpe281.project1.repositories.FileRepository;
@@ -9,6 +10,10 @@ import com.cmpe281.project1.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminInitiateAuthRequest;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminInitiateAuthResponse;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.AuthFlowType;
 
 import java.io.IOException;
 import java.util.*;
@@ -19,6 +24,35 @@ public class FileServiceApply implements FileService {
     private final FileOperation fileOperation;
     private final FileRepository fileRepository;
     private final UserRepository userRepository;
+    private final CognitoIdentityProviderClient cognito;
+
+    @Override
+    public Login login(String username, String password) {
+
+        String CLIENT_ID = "1cr20qhha6c4vk39ncna6519h0";
+        String POOL_ID = "us-east-2_xgwjxtYAV";
+
+        final Map<String, String> authParams = new HashMap<>();
+        authParams.put("USERNAME", username);
+        authParams.put("PASSWORD", password);
+
+        final AdminInitiateAuthRequest authRequest = AdminInitiateAuthRequest.builder()
+                .authFlow(AuthFlowType.ADMIN_USER_PASSWORD_AUTH)
+                .clientId(CLIENT_ID)
+                .userPoolId(POOL_ID)
+                .authParameters(authParams)
+                .build();
+
+        Users user = userRepository.findByUsername(username);
+
+        try {
+            AdminInitiateAuthResponse result = cognito.adminInitiateAuth(authRequest);
+            return(new Login(result.authenticationResult().accessToken(),user.getRole()));
+        } catch (Exception e) {
+            System.out.println(e);
+            return(new Login("Incorrect Username or Password",user.getRole()));
+        }
+    }
 
     @Override
     public Files uploadFile(String username, String title, String description, MultipartFile file) {
