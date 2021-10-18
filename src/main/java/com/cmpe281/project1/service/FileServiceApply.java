@@ -8,7 +8,6 @@ import com.cmpe281.project1.config.BucketName;
 import com.cmpe281.project1.entity.Files;
 import com.cmpe281.project1.repositories.UserRepository;
 import lombok.AllArgsConstructor;
-import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
@@ -139,7 +138,7 @@ public class FileServiceApply implements FileService {
         //Save File in S3 and then save Files in the database
         String fileName = String.format("%s", file.getOriginalFilename());
         try {
-            //fileOperation.delete(path,fileName);
+            fileOperation.delete(files.getPath(),files.getFileName());
             fileOperation.upload(files.getPath(), fileName, Optional.of(metadata), file.getInputStream());
         } catch (IOException e) {
             throw new IllegalStateException("Failed to upload file", e);

@@ -83,11 +83,11 @@ public class RestServices {
     }
 
     @PostMapping("/file")
-    public ResponseEntity<Files> uploadFile(@RequestParam("username") String username,
+    public ResponseEntity<Files> uploadFile(@RequestHeader (name = "Authorization") String token,
                                       @RequestParam("title") String title,
                                       @RequestParam("description") String description,
                                       @RequestParam("file") MultipartFile file) {
-        return new ResponseEntity<>(fileService.uploadFile(username, title, description, file), HttpStatus.OK);
+        return new ResponseEntity<>(fileService.uploadFile(new JwtTokenProvider().getUsername("{"+token.substring(7)+"}"), title, description, file), HttpStatus.OK);
     }
 
     @GetMapping("/file")
