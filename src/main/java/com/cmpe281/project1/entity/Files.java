@@ -6,8 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.joda.time.DateTime;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -23,6 +24,6 @@ public class Files {
     private String description;
     private String path;
     private String fileName;
-    private Timestamp upload_time;
-    private Timestamp updated_time;
+    private Date upload_time;
+    private Date updated_time;
 }

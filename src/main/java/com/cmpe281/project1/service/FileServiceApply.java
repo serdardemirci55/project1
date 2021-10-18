@@ -8,6 +8,7 @@ import com.cmpe281.project1.config.BucketName;
 import com.cmpe281.project1.entity.Files;
 import com.cmpe281.project1.repositories.UserRepository;
 import lombok.AllArgsConstructor;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
@@ -82,6 +83,7 @@ public class FileServiceApply implements FileService {
                 .title(title)
                 .path(path)
                 .fileName(fileName)
+                .upload_time(new Date())
                 .build();
         fileRepository.save(files);
         return fileRepository.findByTitle(files.getTitle());
@@ -145,6 +147,7 @@ public class FileServiceApply implements FileService {
 
         files.setDescription(description);
         files.setFileName(fileName);
+        files.setUpdated_time(new Date());
         fileRepository.save(files);
         return fileRepository.findByTitle(files.getTitle());
     }
