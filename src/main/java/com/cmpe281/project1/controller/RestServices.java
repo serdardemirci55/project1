@@ -8,8 +8,11 @@ import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProviderClientBuilder
 import com.amazonaws.services.cognitoidp.model.SignUpResult;
 import com.amazonaws.services.cognitoidp.model.SignUpRequest;
 import com.amazonaws.services.cognitoidp.model.AttributeType;
+import com.cmpe281.project1.authorization.JwtTokenProvider;
 import com.cmpe281.project1.entity.Files;
+import com.cmpe281.project1.entity.UserFileDto;
 import com.cmpe281.project1.entity.Users;
+import com.cmpe281.project1.repositories.UserRepository;
 import com.cmpe281.project1.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin
 @RestController
 public class RestServices {
 
@@ -47,8 +51,6 @@ public class RestServices {
         String CLIENT_ID = "1cr20qhha6c4vk39ncna6519h0";
         String POOL_ID = "us-east-2_xgwjxtYAV";
 
-        Users user = new Users();
-        user.setUsername(username);
 
         AwsBasicCredentials awsCreds = AwsBasicCredentials.create(AWS_KEY,
                 AWS_SECRET);
@@ -60,7 +62,7 @@ public class RestServices {
                         .build();
 
         final Map<String, String> authParams = new HashMap<>();
-        authParams.put("USERNAME", user.getUsername());
+        authParams.put("USERNAME", username);
         authParams.put("PASSWORD", password);
 
         final AdminInitiateAuthRequest authRequest = AdminInitiateAuthRequest.builder()
@@ -130,8 +132,8 @@ public class RestServices {
     }
 
     @GetMapping("/file")
-    public ResponseEntity<List<Files>> getFiles(@RequestParam("username") String username) {
-        return new ResponseEntity<>(fileService.getFiles(username), HttpStatus.OK);
+    public ResponseEntity<List<UserFileDto>> getFiles(@RequestHeader (name = "Authorization") String token) {
+        return new ResponseEntity<>(fileService.getFiles(new JwtTokenProvider().getUsername("{"+token.substring(7)+"}")), HttpStatus.OK);
     }
 
     @DeleteMapping("/file")
@@ -150,6 +152,9 @@ public class RestServices {
     public String getUrl(@RequestParam("id") Integer id) {
         return fileService.getPresignedUrl(id);
     }
+
+    @GetMapping("/healthcheck")
+    public String healthcheck() { return null; }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public class ResourceNotFoundException extends RuntimeException {

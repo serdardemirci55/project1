@@ -28,11 +28,15 @@ public class Project1Application {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
+
             http
+                    .cors()
+                    .and()
                     .csrf().disable()
                     .authorizeRequests()
                     .antMatchers("/login").permitAll()
                     .antMatchers("/signup").permitAll()
+                    .antMatchers("/healthcheck").permitAll()
                     .anyRequest().hasAuthority("myAuthority");
             http.addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
         }

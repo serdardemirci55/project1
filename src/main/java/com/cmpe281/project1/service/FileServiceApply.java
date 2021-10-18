@@ -1,5 +1,6 @@
 package com.cmpe281.project1.service;
 
+import com.cmpe281.project1.entity.UserFileDto;
 import com.cmpe281.project1.entity.Users;
 import com.cmpe281.project1.repositories.FileRepository;
 import com.cmpe281.project1.config.BucketName;
@@ -53,13 +54,13 @@ public class FileServiceApply implements FileService {
     }
 
     @Override
-    public List<Files> getFiles(String username) {
-        List<Files> files = new ArrayList<>();
+    public List<UserFileDto> getFiles(String username) {
+        List<UserFileDto> files = new ArrayList<>();
         Users user = userRepository.findByUsername(username);
         if (user.getRole().equals("admin")) {
-            fileRepository.findAll().forEach(files::add);
+            userRepository.fetchUserFileInnerJoin().forEach(files::add);
         } else {
-            fileRepository.findByUsername(username).forEach(files::add);
+            userRepository.fetchUserFileInnerJoinByUsername(username).forEach(files::add);
         }
         return files;
     }

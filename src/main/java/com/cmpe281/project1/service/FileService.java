@@ -1,6 +1,7 @@
 package com.cmpe281.project1.service;
 
 import com.cmpe281.project1.entity.Files;
+import com.cmpe281.project1.entity.UserFileDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 public interface FileService {
     Files uploadFile(String username, String title, String description, MultipartFile file);
 
-    List<Files> getFiles(String username);
+    List<UserFileDto> getFiles(String username);
 
     String getPresignedUrl (Integer id);
 
