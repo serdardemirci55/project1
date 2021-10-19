@@ -14,11 +14,12 @@ import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityPr
 import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminInitiateAuthRequest;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminInitiateAuthResponse;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.AuthFlowType;
-
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Created by Serdar Demirci
+ */
 @Service
 @AllArgsConstructor
 public class FileServiceApply implements FileService {

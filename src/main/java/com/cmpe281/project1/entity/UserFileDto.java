@@ -2,6 +2,9 @@ package com.cmpe281.project1.entity;
 
 import java.sql.Timestamp;
 
+/**
+ * Created by Serdar Demirci
+ */
 public interface UserFileDto {
     Integer getId();
     String getFirstName();

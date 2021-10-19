@@ -25,6 +25,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by Serdar Demirci
+ */
 @CrossOrigin
 @RestController
 public class RestServices {

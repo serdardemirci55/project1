@@ -1,19 +1,12 @@
 package com.cmpe281.project1.service;
 
-import com.amazonaws.services.cloudfront.util.SignerUtils.Protocol;
-import com.amazonaws.services.cloudfront.CloudFrontUrlSigner;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
-
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
-import com.amazonaws.util.DateUtils;
-import com.cmpe281.project1.config.BucketName;
 import com.cmpe281.project1.config.CloudFrontName;
 import lombok.AllArgsConstructor;
 import org.jets3t.service.CloudFrontService;
@@ -21,16 +14,14 @@ import org.jets3t.service.CloudFrontServiceException;
 import org.jets3t.service.utils.ServiceUtils;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
-
-
-import java.security.spec.InvalidKeySpecException;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 import java.time.Instant;
-import java.net.URL;
 
+/**
+ * Created by Serdar Demirci
+ */
 @AllArgsConstructor
 @Service
 public class FileOperation {

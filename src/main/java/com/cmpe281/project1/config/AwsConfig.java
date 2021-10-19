@@ -12,13 +12,16 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
 
+/**
+ * Created by Serdar Demirci
+ */
 @Configuration
 public class AwsConfig {
     @Bean
     public AmazonS3 s3() {
-        String AWS_KEY= "AKIA2YMERL6TVUGOUUTV";
-        String AWS_SECRET= "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";
-        String REGION= "us-east-2";
+        String AWS_KEY = "AKIA2YMERL6TVUGOUUTV";
+        String AWS_SECRET = "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";
+        String REGION = "us-east-2";
 
         // Create an Amazon S3 client that is configured to use the accelerate endpoint.
         AWSCredentials awsCredentials =
@@ -33,15 +36,15 @@ public class AwsConfig {
 
     @Bean
     public CognitoIdentityProviderClient cognito() {
-        String AWS_KEY= "AKIA2YMERL6TVUGOUUTV";
-        String AWS_SECRET= "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";
-        String REGION= "us-east-2";
+        String AWS_KEY = "AKIA2YMERL6TVUGOUUTV";
+        String AWS_SECRET = "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";
+        String REGION = "us-east-2";
         AwsBasicCredentials awsCreds = AwsBasicCredentials.create(AWS_KEY,
                 AWS_SECRET);
         return CognitoIdentityProviderClient
-                        .builder()
-                        .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
-                        .region(Region.of(REGION))
-                        .build();
+                .builder()
+                .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
+                .region(Region.of(REGION))
+                .build();
     }
 }

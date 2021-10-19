@@ -1,13 +1,14 @@
 package com.cmpe281.project1.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+/**
+ * Created by Serdar Demirci
+ */
 @Data
 @NoArgsConstructor
 @Builder

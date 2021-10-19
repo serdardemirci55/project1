@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-
+/**
+ * Created by Serdar Demirci
+ */
 public interface UserRepository extends CrudRepository<Users, Long> {
     Users findByUsername(String username);
 

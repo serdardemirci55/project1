@@ -6,10 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.joda.time.DateTime;
-
 import java.util.Date;
 
+/**
+ * Created by Serdar Demirci
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

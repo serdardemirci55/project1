@@ -8,6 +8,9 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * Created by Serdar Demirci
+ */
 public class JwtTokenFilter extends GenericFilterBean {
 
     private JwtTokenProvider mProvider;

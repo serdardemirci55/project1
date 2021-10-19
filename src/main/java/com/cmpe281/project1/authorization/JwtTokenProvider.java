@@ -19,7 +19,9 @@ import java.net.URL;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 
-
+/**
+ * Created by Serdar Demirci
+ */
 public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest req) {
