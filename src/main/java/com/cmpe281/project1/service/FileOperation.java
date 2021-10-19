@@ -55,7 +55,7 @@ public class FileOperation {
     }
 
     public String generatePresignedUrl (String objectKey) {
-        String keyPairId="K3KX5ADHMTGWDX";
+        String keyPairId="XXXXXXXXX";
         String privateKeyFilePath="/Users/sdemirci/Desktop/private_key.der";
         String policyResourcePath = "https://" +  CloudFrontName.FILE.getCloudFrontName() + "/" + objectKey;
         // Set the presigned URL to expire after one hour.
