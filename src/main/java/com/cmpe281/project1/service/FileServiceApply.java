@@ -31,8 +31,8 @@ public class FileServiceApply implements FileService {
     @Override
     public Login login(String username, String password) {
 
-        String CLIENT_ID = "1cr20qhha6c4vk39ncna6519h0";
-        String POOL_ID = "us-east-2_xgwjxtYAV";
+        String CLIENT_ID = "XXXXXXXXXX";
+        String POOL_ID = "us-east-2_XXXXXX";
 
         final Map<String, String> authParams = new HashMap<>();
         authParams.put("USERNAME", username);
