@@ -47,7 +47,7 @@ public class RestServices {
     String signup(@RequestParam String username, @RequestParam String password, @RequestParam String first_name, @RequestParam String last_name, @RequestParam String role) throws IOException {
 
         String REGION= "us-east-2";
-        String CLIENT_ID = "1cr20qhha6c4vk39ncna6519h0";
+        String CLIENT_ID = "XXXXXXXXXXXXXXXX";
 
         Users user = new Users();
         user.setUsername(username);
