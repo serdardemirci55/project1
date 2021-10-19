@@ -15,6 +15,7 @@ import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminInitia
 import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminInitiateAuthResponse;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.AuthFlowType;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -50,7 +51,7 @@ public class FileServiceApply implements FileService {
             return(new Login(result.authenticationResult().accessToken(),user.getRole()));
         } catch (Exception e) {
             System.out.println(e);
-            return(new Login("Incorrect Username or Password",user.getRole()));
+            return(new Login("Incorrect Username or Password","Incorrect Username or Password"));
         }
     }
 
